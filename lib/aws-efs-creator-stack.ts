@@ -5,7 +5,18 @@ import * as efs from 'aws-cdk-lib/aws-efs';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { AwsEfsCreatorStackProps } from './AwsEfsCreatorStackProps';
 
+/**
+ * The AwsEfsCreatorStack class is responsible for creating and configuring the AWS EFS resources
+ * necessary for the application. It sets up a VPC, security groups, and an EFS file system with
+ * appropriate policies and outputs.
+ */
 export class AwsEfsCreatorStack extends cdk.Stack {
+  /**
+   * Constructs a new instance of the AwsEfsCreatorStack.
+   * @param scope The scope in which to define this construct (usually `this` from a parent construct).
+   * @param id A unique identifier for the construct within its scope.
+   * @param props Configuration properties for the EFS stack, including resource prefixes, deployment environment, and VPC settings.
+   */
   constructor(scope: Construct, id: string, props: AwsEfsCreatorStackProps) {
     super(scope, id, props);
 
