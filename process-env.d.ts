@@ -13,5 +13,6 @@ declare module NodeJS {
          * The owner of the application.
          */
         OWNER: string;
+        VPC_ID: string | undefined;
     }
 }

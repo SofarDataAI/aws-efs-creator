@@ -17,4 +17,8 @@ export interface AwsEfsCreatorStackProps extends StackProps {
      * The name of the application, used for resource naming and tagging.
      */
     readonly appName: string;
+    /**
+     * The vpcId for the deployment.
+     */
+    readonly vpcId: string;
 }
