@@ -5,6 +5,7 @@ import * as cdk from 'aws-cdk-lib';
 import * as dotenv from 'dotenv';
 import { Aspects } from 'aws-cdk-lib';
 import { ApplyTags } from '../utils/apply-tag';
+import { AwsSolutionsChecks } from 'cdk-nag';
 import { checkEnvVariables } from '../utils/check-environment-variable';
 import { AwsEfsCreatorStackProps } from '../lib/AwsEfsCreatorStackProps';
 import { AwsEfsCreatorStack } from '../lib/aws-efs-creator-stack';
@@ -22,6 +23,7 @@ const deployEnvironment = process.env.ENVIRONMENT!;
 checkEnvVariables('APP_NAME', 'OWNER', 'VPC_ID');
 const appName = process.env.APP_NAME!;
 const owner = process.env.OWNER!;
+const vpcId = process.env.VPC_ID!;
 
 // apply tags to all resources
 appAspects.add(new ApplyTags({
@@ -30,16 +32,19 @@ appAspects.add(new ApplyTags({
   owner: owner,
 }));
 
+// security check
+appAspects.add(new AwsSolutionsChecks());
+
 const stackProps: AwsEfsCreatorStackProps = {
   resourcePrefix: `${appName}-${deployEnvironment}`,
   env: {
-      region: cdkRegion,
-      account,
+    region: cdkRegion,
+    account,
   },
   deployRegion: cdkRegion,
   deployEnvironment,
   appName,
-  vpcId: process.env.VPC_ID!,
+  vpcId,
 };
 new AwsEfsCreatorStack(app, `AwsEfsCreatorStack`, {
   ...stackProps,
