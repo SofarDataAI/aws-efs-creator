@@ -47,5 +47,19 @@ export class AwsEfsCreatorStack extends cdk.Stack {
             },
         }),
     );
+
+    // export efsSG id
+    new cdk.CfnOutput(this, 'efsSG', {
+      value: efsSG.securityGroupId,
+      exportName: `${props.resourcePrefix}-efsSG`,
+      description: 'The security group id for the EFS file system.',
+    });
+
+    // export efsFileSystem id
+    new cdk.CfnOutput(this, 'efsFileSystemId', {
+      value: efsFileSystem.fileSystemId,
+      exportName: `${props.resourcePrefix}-efsFileSystemId`,
+      description: 'The file system id for the EFS file system.',
+    });
   }
 }
