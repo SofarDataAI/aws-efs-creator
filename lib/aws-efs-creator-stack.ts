@@ -1,6 +1,8 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as efs from 'aws-cdk-lib/aws-efs';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import { AwsEfsCreatorStackProps } from './AwsEfsCreatorStackProps';
 
 export class AwsEfsCreatorStack extends cdk.Stack {
@@ -18,5 +20,32 @@ export class AwsEfsCreatorStack extends cdk.Stack {
       vpc: vpc,
       allowAllOutbound: true,
     });
+    efsSG.applyRemovalPolicy(removalPolicy);
+
+    // create an EFS File System
+    const efsFileSystem = new efs.FileSystem(this, `${props.resourcePrefix}-efsFileSystem`, {
+      fileSystemName: `${props.resourcePrefix}-efsFileSystem`,
+      vpc,
+      removalPolicy,
+      securityGroup: efsSG, // Ensure this security group allows NFS traffic from the ECS tasks
+      encrypted: true, // Enable encryption at rest
+      performanceMode: efs.PerformanceMode.GENERAL_PURPOSE, // For AI application, HCP application, Analytics application, and media processing workflows
+      allowAnonymousAccess: false, // Disable anonymous access
+      throughputMode: efs.ThroughputMode.ELASTIC,
+      lifecyclePolicy: efs.LifecyclePolicy.AFTER_30_DAYS, // After 2 weeks, if a file is not accessed for given days, it will move to EFS Infrequent Access.
+    });
+
+    // add EFS access policy
+    efsFileSystem.addToResourcePolicy(
+        new iam.PolicyStatement({
+            actions: ['elasticfilesystem:ClientMount'],
+            principals: [new iam.AnyPrincipal()],
+            conditions: {
+                Bool: {
+                    'elasticfilesystem:AccessedViaMountTarget': 'true'
+                }
+            },
+        }),
+    );
   }
 }
