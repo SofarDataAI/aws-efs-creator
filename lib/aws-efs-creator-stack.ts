@@ -4,6 +4,7 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as efs from 'aws-cdk-lib/aws-efs';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import { AwsEfsCreatorStackProps } from './AwsEfsCreatorStackProps';
+import { parsePerformanceMode, parseThroughputMode } from '../utils/efs-mode-parsing';
 
 /**
  * The AwsEfsCreatorStack class is responsible for creating and configuring the AWS EFS resources
@@ -34,16 +35,19 @@ export class AwsEfsCreatorStack extends cdk.Stack {
     efsSG.applyRemovalPolicy(removalPolicy);
 
     // create an EFS File System
+    const performanceMode = parsePerformanceMode(props.performanceMode);
+    const throughputMode = parseThroughputMode(props.throughputMode);
+
     const efsFileSystem = new efs.FileSystem(this, `${props.resourcePrefix}-efsFileSystem`, {
       fileSystemName: `${props.resourcePrefix}-efsFileSystem`,
       vpc,
       removalPolicy,
       securityGroup: efsSG, // Ensure this security group allows NFS traffic from the ECS tasks
       encrypted: true, // Enable encryption at rest
-      performanceMode: efs.PerformanceMode.GENERAL_PURPOSE, // For AI application, HCP application, Analytics application, and media processing workflows
+      performanceMode, // For AI application, HCP application, Analytics application, and media processing workflows we should use MAX_IO
       allowAnonymousAccess: false, // Disable anonymous access
-      throughputMode: efs.ThroughputMode.ELASTIC,
-      lifecyclePolicy: efs.LifecyclePolicy.AFTER_30_DAYS, // After 2 weeks, if a file is not accessed for given days, it will move to EFS Infrequent Access.
+      throughputMode,
+      lifecyclePolicy: efs.LifecyclePolicy.AFTER_90_DAYS, // After 3 months, if a file is not accessed for given days, it will move to EFS Infrequent Access.
     });
 
     // add EFS access policy

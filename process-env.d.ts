@@ -14,5 +14,7 @@ declare module NodeJS {
          */
         OWNER: string;
         VPC_ID: string | undefined;
+        PERFORMANCE_MODE: string | undefined;
+        THROUGHPUT_MODE: string | undefined;
     }
 }
