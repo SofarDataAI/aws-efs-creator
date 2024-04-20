@@ -15,7 +15,14 @@ const app = new cdk.App();
 const appAspects = Aspects.of(app);
 
 // check environment variables
-checkEnvVariables('APP_NAME', 'OWNER', 'VPC_ID', 'CDK_DEPLOY_REGION', 'ENVIRONMENT');
+checkEnvVariables('APP_NAME',
+'OWNER',
+'VPC_ID',
+'CDK_DEPLOY_REGION',
+'ENVIRONMENT',
+'PERFORMANCE_MODE',
+'THROUGHPUT_MODE',
+);
 
 const { CDK_DEFAULT_ACCOUNT: account, CDK_DEFAULT_REGION: region } = process.env;
 
@@ -25,6 +32,8 @@ const deployEnvironment = process.env.ENVIRONMENT!;
 const appName = process.env.APP_NAME!;
 const owner = process.env.OWNER!;
 const vpcId = process.env.VPC_ID!;
+const performanceMode = process.env.PERFORMANCE_MODE!;
+const throughputMode = process.env.THROUGHPUT_MODE!;
 
 // apply tags to all resources
 appAspects.add(new ApplyTags({
@@ -46,6 +55,8 @@ const stackProps: AwsEfsCreatorStackProps = {
   deployEnvironment,
   appName,
   vpcId,
+  performanceMode,
+  throughputMode,
 };
 new AwsEfsCreatorStack(app, `AwsEfsCreatorStack`, {
   ...stackProps,
