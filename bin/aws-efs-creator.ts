@@ -14,13 +14,14 @@ dotenv.config(); // Load environment variables from .env file
 const app = new cdk.App();
 const appAspects = Aspects.of(app);
 
+// check environment variables
+checkEnvVariables('APP_NAME', 'OWNER', 'VPC_ID', 'CDK_DEPLOY_REGION', 'ENVIRONMENT');
+
 const { CDK_DEFAULT_ACCOUNT: account, CDK_DEFAULT_REGION: region } = process.env;
 
 const cdkRegion = process.env.CDK_DEPLOY_REGION!;
 const deployEnvironment = process.env.ENVIRONMENT!;
 
-// check environment variables
-checkEnvVariables('APP_NAME', 'OWNER', 'VPC_ID');
 const appName = process.env.APP_NAME!;
 const owner = process.env.OWNER!;
 const vpcId = process.env.VPC_ID!;
