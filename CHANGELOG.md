@@ -1,3 +1,16 @@
+## 2024-04-20
+
+### Added
+- Added `PERFORMANCE_MODE` and `THROUGHPUT_MODE` environment variables.
+- Added `parsePerformanceMode` and `parseThroughputMode` functions.
+- Retrieved `performanceMode` and `throughputMode` from environment variables.
+- Added `performanceMode` and `throughputMode` to stack props.
+- Used `parsePerformanceMode` and `parseThroughputMode` to set `performanceMode` and `throughputMode` for EFS file system.
+- Added `PERFORMANCE_MODE` and `THROUGHPUT_MODE` examples to `.env.example`.
+
+### Changed
+- Updated version to 0.1.3.
+
 ## 2024-04-19
 
 ### Added
