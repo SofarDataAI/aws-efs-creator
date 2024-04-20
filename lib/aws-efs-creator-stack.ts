@@ -47,7 +47,7 @@ export class AwsEfsCreatorStack extends cdk.Stack {
       performanceMode, // For AI application, HCP application, Analytics application, and media processing workflows we should use MAX_IO
       allowAnonymousAccess: false, // Disable anonymous access
       throughputMode,
-      lifecyclePolicy: efs.LifecyclePolicy.AFTER_30_DAYS, // After 2 weeks, if a file is not accessed for given days, it will move to EFS Infrequent Access.
+      lifecyclePolicy: efs.LifecyclePolicy.AFTER_90_DAYS, // After 3 months, if a file is not accessed for given days, it will move to EFS Infrequent Access.
     });
 
     // add EFS access policy

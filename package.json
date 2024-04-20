@@ -1,6 +1,6 @@
 {
   "name": "aws-efs-creator",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "bin": {
     "aws-efs-creator": "bin/aws-efs-creator.js"
   },
