@@ -21,4 +21,12 @@ export interface AwsEfsCreatorStackProps extends StackProps {
      * The vpcId for the deployment.
      */
     readonly vpcId: string;
+    /**
+     * The performance mode for the EFS file system.
+     */
+    readonly performanceMode: string;
+    /**
+     * The throughput mode for the EFS file system.
+     */
+    readonly throughputMode: string;
 }
